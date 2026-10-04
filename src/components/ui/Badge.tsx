@@ -2,61 +2,114 @@ import React from 'react';
 import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { useAppTheme } from '@/hooks/useAppTheme';
 
-export type BadgeVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'info';
+export type BadgeVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'primary' | 'secondary';
+export type BadgeSize = 'sm' | 'md';
 
 export interface BadgeProps {
   label: string;
   variant?: BadgeVariant;
+  size?: BadgeSize;
+  icon?: React.ReactNode;
   style?: ViewStyle;
   className?: string;
 }
 
-export function Badge({ label, variant = 'primary', style, className }: BadgeProps) {
+export function Badge({
+  label,
+  variant = 'default',
+  size = 'md',
+  icon,
+  style,
+  className,
+}: BadgeProps) {
   const { colors, radius, spacing, typography } = useAppTheme();
 
-  const variantStyles = {
-    primary: {
-      bg: colors.backgroundElement,
-      text: colors.primary,
+  const getVariantStyles = () => {
+    switch (variant) {
+      case 'success':
+        return {
+          bg: colors.successLight,
+          text: colors.success,
+          border: 'transparent',
+        };
+      case 'warning':
+        return {
+          bg: colors.warningLight,
+          text: colors.warning,
+          border: 'transparent',
+        };
+      case 'error':
+        return {
+          bg: colors.errorLight,
+          text: colors.error,
+          border: 'transparent',
+        };
+      case 'info':
+        return {
+          bg: colors.infoLight,
+          text: colors.info,
+          border: 'transparent',
+        };
+      case 'neutral':
+      case 'secondary':
+        return {
+          bg: colors.backgroundElement,
+          text: colors.textSecondary,
+          border: colors.borderMuted,
+        };
+      case 'default':
+      case 'primary':
+      default:
+        return {
+          bg: colors.infoLight,
+          text: colors.primary,
+          border: 'transparent',
+        };
+    }
+  };
+
+  const vStyle = getVariantStyles();
+
+  const sizeStyles = {
+    sm: {
+      paddingVertical: 2,
+      paddingHorizontal: spacing.xs + 2,
+      fontSize: typography.caption.fontSize - 1,
+      gap: 4,
     },
-    secondary: {
-      bg: colors.backgroundSelected,
-      text: colors.textSecondary,
+    md: {
+      paddingVertical: spacing.xs,
+      paddingHorizontal: spacing.sm + 2,
+      fontSize: typography.caption.fontSize,
+      gap: 6,
     },
-    success: {
-      bg: '#ecfdf5',
-      text: colors.success,
-    },
-    warning: {
-      bg: '#fffbeb',
-      text: colors.warning,
-    },
-    info: {
-      bg: '#f0f9ff',
-      text: colors.info,
-    },
-  }[variant];
+  }[size];
 
   return (
     <View
+      accessibilityRole="text"
       style={[
         styles.badge,
         {
-          backgroundColor: variantStyles.bg,
+          backgroundColor: vStyle.bg,
+          borderColor: vStyle.border,
+          borderWidth: vStyle.border !== 'transparent' ? 1 : 0,
           borderRadius: radius.full,
-          paddingVertical: spacing.xxs,
-          paddingHorizontal: spacing.sm,
+          paddingVertical: sizeStyles.paddingVertical,
+          paddingHorizontal: sizeStyles.paddingHorizontal,
+          gap: sizeStyles.gap,
         },
         style,
       ]}
       className={className}>
+      {icon}
       <Text
         style={[
           styles.text,
           {
-            color: variantStyles.text,
-            fontSize: typography.fontSize.xs,
-            fontWeight: typography.fontWeight.medium,
+            color: vStyle.text,
+            fontSize: sizeStyles.fontSize,
+            fontWeight: typography.label.fontWeight,
           },
         ]}>
         {label}
@@ -70,6 +123,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
     letterSpacing: 0.2,

@@ -1,64 +1,112 @@
 /**
- * JobKamer Design System - Color Palette
- * Designed for professional networking and employment in Cameroon & Africa
+ * JobKamer Official Design System - Color Tokens
+ * Supports Light Mode and Dark Mode with WCAG AA compliance
  */
 
 export const Colors = {
-  // Brand Colors
+  // Base brand references
   brand: {
-    primary: '#059669', // Emerald 600 - Main professional brand green
-    primaryDark: '#047857', // Emerald 700
-    primaryLight: '#34d399', // Emerald 400
-    secondary: '#0284c7', // Sky 600 - Accent blue for opportunities
-    secondaryDark: '#0369a1',
+    primary: '#1A6BCC',
+    primaryLight: '#4A8FDE',
+    primaryDark: '#124B91',
+    secondary: '#27AE60',
+    secondaryLight: '#48C77F',
+    secondaryDark: '#1E8449',
+    error: '#E74C3C',
   },
-  // National touch accents
+  // Cameroon national accents
   cameroon: {
     green: '#007A5E',
     red: '#CE1126',
     yellow: '#FCD116',
   },
   light: {
-    text: '#0f172a', // Slate 900
-    textSecondary: '#64748b', // Slate 500
-    textMuted: '#94a3b8', // Slate 400
-    background: '#ffffff',
-    backgroundSubtle: '#f8fafc', // Slate 50
-    backgroundElement: '#f1f5f9', // Slate 100
-    backgroundSelected: '#e2e8f0', // Slate 200
-    card: '#ffffff',
-    border: '#e2e8f0', // Slate 200
-    borderMuted: '#f1f5f9',
-    primary: '#059669',
-    primaryForeground: '#ffffff',
-    tint: '#059669',
-    tabIconDefault: '#64748b',
-    tabIconSelected: '#059669',
-    success: '#10b981',
-    warning: '#f59e0b',
-    error: '#ef4444',
-    info: '#0284c7',
+    // Brand
+    primary: '#1A6BCC',
+    primaryLight: '#4A8FDE',
+    primaryDark: '#124B91',
+    primaryForeground: '#FFFFFF',
+    secondary: '#27AE60',
+    secondaryLight: '#48C77F',
+    secondaryDark: '#1E8449',
+    secondaryForeground: '#FFFFFF',
+
+    // Surfaces & Backgrounds
+    background: '#F5F7FA',
+    surface: '#FFFFFF',
+    surfaceElevated: '#FFFFFF',
+    card: '#FFFFFF',
+    backgroundSubtle: '#F8FAFC',
+    backgroundElement: '#ECEFF4',
+    backgroundSelected: '#E2E8F0',
+
+    // Typography
+    text: '#2C2C2C',
+    textSecondary: '#7F8C8D',
+    textDisabled: '#BDC3C7',
+
+    // Borders
+    border: '#E2E8F0',
+    borderMuted: '#F0F4F8',
+
+    // Feedback & Semantic states
+    success: '#27AE60',
+    successLight: '#E9F7EF',
+    warning: '#F39C12',
+    warningLight: '#FEF9E7',
+    error: '#E74C3C',
+    errorLight: '#FDEDEC',
+    info: '#1A6BCC',
+    infoLight: '#E8F1FC',
+
+    // Navigation & Interactive
+    tint: '#1A6BCC',
+    tabIconDefault: '#7F8C8D',
+    tabIconSelected: '#1A6BCC',
   },
   dark: {
-    text: '#f8fafc', // Slate 50
-    textSecondary: '#94a3b8', // Slate 400
-    textMuted: '#64748b', // Slate 500
-    background: '#090d16', // Deep Slate
-    backgroundSubtle: '#0f172a', // Slate 900
-    backgroundElement: '#1e293b', // Slate 800
-    backgroundSelected: '#334155', // Slate 700
-    card: '#0f172a',
-    border: '#1e293b',
-    borderMuted: '#162032',
-    primary: '#10b981',
-    primaryForeground: '#ffffff',
-    tint: '#10b981',
-    tabIconDefault: '#94a3b8',
-    tabIconSelected: '#10b981',
-    success: '#10b981',
-    warning: '#f59e0b',
-    error: '#ef4444',
-    info: '#38bdf8',
+    // Brand
+    primary: '#3B82F6', // Adjusted for high contrast against dark background #1A1A2E
+    primaryLight: '#60A5FA',
+    primaryDark: '#1E40AF',
+    primaryForeground: '#FFFFFF',
+    secondary: '#2ECC71',
+    secondaryLight: '#58D68D',
+    secondaryDark: '#1E8449',
+    secondaryForeground: '#FFFFFF',
+
+    // Surfaces & Backgrounds
+    background: '#1A1A2E',
+    surface: '#24243E',
+    surfaceElevated: '#2E2E4D',
+    card: '#24243E',
+    backgroundSubtle: '#1F1F35',
+    backgroundElement: '#2A2A44',
+    backgroundSelected: '#343454',
+
+    // Typography
+    text: '#F5F7FA',
+    textSecondary: '#A0ABC0',
+    textDisabled: '#555B70',
+
+    // Borders
+    border: '#2E2E48',
+    borderMuted: '#25253C',
+
+    // Feedback & Semantic states
+    success: '#2ECC71',
+    successLight: '#18382B',
+    warning: '#F5A623',
+    warningLight: '#3D2F14',
+    error: '#FF6B6B',
+    errorLight: '#3D1C1C',
+    info: '#4DA3FF',
+    infoLight: '#162A45',
+
+    // Navigation & Interactive
+    tint: '#3B82F6',
+    tabIconDefault: '#A0ABC0',
+    tabIconSelected: '#3B82F6',
   },
 };
 

@@ -1,99 +1,160 @@
-import { Text, type TextProps, StyleSheet } from 'react-native';
+import React from 'react';
+import { Text as RNText, type TextProps as RNTextProps, TextStyle } from 'react-native';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import { ColorToken } from '@/theme';
+import { ColorToken, Typography, TypographyVariant } from '@/theme';
 
-export type ThemedTextVariant =
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'body'
+export type TextVariant =
+  | TypographyVariant
   | 'bodyBold'
-  | 'caption'
+  | 'bodySmallBold'
   | 'captionBold'
-  | 'link'
-  | 'label';
+  | 'link';
 
-export type ThemedTextProps = TextProps & {
-  variant?: ThemedTextVariant;
+export interface TextProps extends RNTextProps {
+  variant?: TextVariant;
   colorToken?: ColorToken;
+  align?: TextStyle['textAlign'];
+  weight?: TextStyle['fontWeight'];
   className?: string;
-};
+  children?: React.ReactNode;
+}
 
 export function ThemedText({
   style,
   variant = 'body',
   colorToken,
+  align,
+  weight,
   className,
+  accessibilityRole,
   ...rest
-}: ThemedTextProps) {
+}: TextProps) {
   const { colors, typography } = useAppTheme();
 
-  const variantStyles = {
-    h1: {
-      fontSize: typography.fontSize['3xl'],
-      lineHeight: typography.lineHeight['3xl'],
-      fontWeight: typography.fontWeight.bold,
-      color: colors.text,
-    },
-    h2: {
-      fontSize: typography.fontSize['2xl'],
-      lineHeight: typography.lineHeight['2xl'],
-      fontWeight: typography.fontWeight.bold,
-      color: colors.text,
-    },
-    h3: {
-      fontSize: typography.fontSize.xl,
-      lineHeight: typography.lineHeight.xl,
-      fontWeight: typography.fontWeight.semibold,
-      color: colors.text,
-    },
-    body: {
-      fontSize: typography.fontSize.base,
-      lineHeight: typography.lineHeight.base,
-      fontWeight: typography.fontWeight.normal,
-      color: colors.text,
-    },
-    bodyBold: {
-      fontSize: typography.fontSize.base,
-      lineHeight: typography.lineHeight.base,
-      fontWeight: typography.fontWeight.semibold,
-      color: colors.text,
-    },
-    caption: {
-      fontSize: typography.fontSize.sm,
-      lineHeight: typography.lineHeight.sm,
-      fontWeight: typography.fontWeight.normal,
-      color: colors.textSecondary,
-    },
-    captionBold: {
-      fontSize: typography.fontSize.sm,
-      lineHeight: typography.lineHeight.sm,
-      fontWeight: typography.fontWeight.semibold,
-      color: colors.textSecondary,
-    },
-    link: {
-      fontSize: typography.fontSize.sm,
-      lineHeight: typography.lineHeight.sm,
-      fontWeight: typography.fontWeight.medium,
-      color: colors.primary,
-    },
-    label: {
-      fontSize: typography.fontSize.xs,
-      lineHeight: typography.lineHeight.xs,
-      fontWeight: typography.fontWeight.medium,
-      color: colors.textMuted,
-      textTransform: 'uppercase' as const,
-      letterSpacing: 0.5,
-    },
-  }[variant];
+  // Resolve base typography token
+  const getVariantStyle = (): TextStyle => {
+    switch (variant) {
+      case 'display':
+        return {
+          fontSize: typography.display.fontSize,
+          lineHeight: typography.display.lineHeight,
+          fontWeight: typography.display.fontWeight,
+          letterSpacing: typography.display.letterSpacing,
+        };
+      case 'h1':
+        return {
+          fontSize: typography.h1.fontSize,
+          lineHeight: typography.h1.lineHeight,
+          fontWeight: typography.h1.fontWeight,
+          letterSpacing: typography.h1.letterSpacing,
+        };
+      case 'h2':
+        return {
+          fontSize: typography.h2.fontSize,
+          lineHeight: typography.h2.lineHeight,
+          fontWeight: typography.h2.fontWeight,
+          letterSpacing: typography.h2.letterSpacing,
+        };
+      case 'h3':
+        return {
+          fontSize: typography.h3.fontSize,
+          lineHeight: typography.h3.lineHeight,
+          fontWeight: typography.h3.fontWeight,
+        };
+      case 'body':
+        return {
+          fontSize: typography.body.fontSize,
+          lineHeight: typography.body.lineHeight,
+          fontWeight: typography.body.fontWeight,
+        };
+      case 'bodyBold':
+        return {
+          fontSize: typography.body.fontSize,
+          lineHeight: typography.body.lineHeight,
+          fontWeight: '700',
+        };
+      case 'bodySmall':
+        return {
+          fontSize: typography.bodySmall.fontSize,
+          lineHeight: typography.bodySmall.lineHeight,
+          fontWeight: typography.bodySmall.fontWeight,
+        };
+      case 'bodySmallBold':
+        return {
+          fontSize: typography.bodySmall.fontSize,
+          lineHeight: typography.bodySmall.lineHeight,
+          fontWeight: '700',
+        };
+      case 'caption':
+        return {
+          fontSize: typography.caption.fontSize,
+          lineHeight: typography.caption.lineHeight,
+          fontWeight: typography.caption.fontWeight,
+        };
+      case 'captionBold':
+        return {
+          fontSize: typography.caption.fontSize,
+          lineHeight: typography.caption.lineHeight,
+          fontWeight: '700',
+        };
+      case 'label':
+        return {
+          fontSize: typography.label.fontSize,
+          lineHeight: typography.label.lineHeight,
+          fontWeight: typography.label.fontWeight,
+          letterSpacing: typography.label.letterSpacing,
+          textTransform: typography.label.textTransform,
+        };
+      case 'button':
+        return {
+          fontSize: typography.button.fontSize,
+          lineHeight: typography.button.lineHeight,
+          fontWeight: typography.button.fontWeight,
+          letterSpacing: typography.button.letterSpacing,
+        };
+      case 'link':
+        return {
+          fontSize: typography.bodySmall.fontSize,
+          lineHeight: typography.bodySmall.lineHeight,
+          fontWeight: '600',
+        };
+    }
+  };
 
-  const resolvedColor = colorToken ? colors[colorToken] : variantStyles.color;
+  const variantStyle = getVariantStyle();
+
+  // Default color depending on variant
+  const getDefaultColor = () => {
+    if (variant === 'link') return colors.primary;
+    if (variant === 'caption' || variant === 'bodySmall') return colors.textSecondary;
+    if (variant === 'label') return colors.textSecondary;
+    return colors.text;
+  };
+
+  const resolvedColor = colorToken ? colors[colorToken] : getDefaultColor();
+
+  // Accessibility header role inference
+  const defaultA11yRole =
+    variant === 'display' || variant === 'h1' || variant === 'h2' || variant === 'h3'
+      ? 'header'
+      : accessibilityRole ?? 'text';
 
   return (
-    <Text
-      style={[variantStyles, { color: resolvedColor }, style]}
+    <RNText
+      accessibilityRole={defaultA11yRole}
+      style={[
+        variantStyle,
+        { color: resolvedColor },
+        align ? { textAlign: align } : null,
+        weight ? { fontWeight: weight } : null,
+        style,
+      ]}
       className={className}
       {...rest}
     />
   );
 }
+
+// Convenient alias for modern DS usage
+export const Text = ThemedText;
+export type ThemedTextProps = TextProps;

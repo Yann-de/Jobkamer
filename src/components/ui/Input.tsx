@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,16 +13,58 @@ export interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
   helperText?: string;
+  disabled?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   containerStyle?: ViewStyle;
 }
 
 export const Input = React.forwardRef<TextInput, InputProps>(
-  ({ label, error, helperText, leftIcon, rightIcon, containerStyle, style, ...rest }, ref) => {
-    const { colors, radius, spacing, typography } = useAppTheme();
+  (
+    {
+      label,
+      error,
+      helperText,
+      disabled = false,
+      leftIcon,
+      rightIcon,
+      containerStyle,
+      style,
+      onFocus,
+      onBlur,
+      editable = true,
+      ...rest
+    },
+    ref
+  ) => {
+    const { colors, radius, spacing, typography, layout } = useAppTheme();
+    const [isFocused, setIsFocused] = useState(false);
 
+    const isEditable = editable && !disabled;
     const hasError = Boolean(error);
+
+    const handleFocus: TextInputProps['onFocus'] = (e) => {
+      setIsFocused(true);
+      onFocus?.(e);
+    };
+
+    const handleBlur: TextInputProps['onBlur'] = (e) => {
+      setIsFocused(false);
+      onBlur?.(e);
+    };
+
+    // Determine border and background colors based on state
+    const getBorderColor = () => {
+      if (hasError) return colors.error;
+      if (isFocused) return colors.primary;
+      return colors.border;
+    };
+
+    const getBackgroundColor = () => {
+      if (!isEditable) return colors.backgroundElement;
+      if (isFocused) return colors.surface;
+      return colors.surface;
+    };
 
     return (
       <View style={[styles.container, containerStyle]}>
@@ -31,9 +73,13 @@ export const Input = React.forwardRef<TextInput, InputProps>(
             style={[
               styles.label,
               {
-                color: colors.textSecondary,
-                fontSize: typography.fontSize.sm,
-                fontWeight: typography.fontWeight.medium,
+                color: hasError
+                  ? colors.error
+                  : isFocused
+                  ? colors.primary
+                  : colors.text,
+                fontSize: typography.bodySmall.fontSize,
+                fontWeight: typography.label.fontWeight,
                 marginBottom: spacing.xs,
               },
             ]}>
@@ -45,23 +91,32 @@ export const Input = React.forwardRef<TextInput, InputProps>(
           style={[
             styles.inputWrapper,
             {
-              backgroundColor: colors.backgroundSubtle,
-              borderColor: hasError ? colors.error : colors.border,
+              backgroundColor: getBackgroundColor(),
+              borderColor: getBorderColor(),
+              borderWidth: isFocused ? 1.5 : 1,
               borderRadius: radius.md,
               paddingHorizontal: spacing.md,
+              minHeight: layout.minTouchTarget,
+              opacity: !isEditable ? 0.6 : 1,
             },
           ]}>
           {leftIcon && <View style={styles.iconLeft}>{leftIcon}</View>}
 
           <TextInput
             ref={ref}
-            placeholderTextColor={colors.textMuted}
+            editable={isEditable}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            placeholderTextColor={colors.textDisabled}
+            selectionColor={colors.primary}
+            accessibilityState={{ disabled: !isEditable }}
+            accessibilityLabel={label}
             style={[
               styles.input,
               {
-                color: colors.text,
-                fontSize: typography.fontSize.base,
-                paddingVertical: spacing.md,
+                color: isEditable ? colors.text : colors.textDisabled,
+                fontSize: typography.body.fontSize,
+                paddingVertical: spacing.sm,
               },
               style,
             ]}
@@ -73,11 +128,12 @@ export const Input = React.forwardRef<TextInput, InputProps>(
 
         {hasError ? (
           <Text
+            accessibilityRole="alert"
             style={[
-              styles.errorText,
+              styles.helperText,
               {
                 color: colors.error,
-                fontSize: typography.fontSize.xs,
+                fontSize: typography.caption.fontSize,
                 marginTop: spacing.xs,
               },
             ]}>
@@ -88,8 +144,8 @@ export const Input = React.forwardRef<TextInput, InputProps>(
             style={[
               styles.helperText,
               {
-                color: colors.textMuted,
-                fontSize: typography.fontSize.xs,
+                color: colors.textSecondary,
+                fontSize: typography.caption.fontSize,
                 marginTop: spacing.xs,
               },
             ]}>
@@ -111,17 +167,19 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
   },
   input: {
     flex: 1,
   },
   iconLeft: {
     marginRight: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   iconRight: {
     marginLeft: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  errorText: {},
   helperText: {},
 });

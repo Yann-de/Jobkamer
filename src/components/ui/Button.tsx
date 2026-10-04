@@ -17,6 +17,7 @@ export interface ButtonProps extends Omit<PressableProps, 'style'> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   isLoading?: boolean;
+  fullWidth?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   style?: ViewStyle;
@@ -28,34 +29,39 @@ export function Button({
   variant = 'primary',
   size = 'md',
   isLoading = false,
+  fullWidth = false,
   leftIcon,
   rightIcon,
   disabled,
   style,
   className,
+  accessibilityLabel,
   ...rest
 }: ButtonProps) {
-  const { colors, radius, spacing, typography } = useAppTheme();
+  const { colors, radius, spacing, typography, layout } = useAppTheme();
 
   const isInteractive = !disabled && !isLoading;
 
   const sizeStyles = {
     sm: {
-      paddingVertical: spacing.xs + 2,
+      minHeight: 36,
+      paddingVertical: spacing.xs,
       paddingHorizontal: spacing.md,
-      fontSize: typography.fontSize.sm,
+      fontSize: typography.button.fontSize - 1,
       gap: spacing.xs,
     },
     md: {
-      paddingVertical: spacing.sm + 2,
-      paddingHorizontal: spacing.base,
-      fontSize: typography.fontSize.base,
+      minHeight: layout.minTouchTarget, // 44px accessible touch target
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.lg,
+      fontSize: typography.button.fontSize,
       gap: spacing.sm,
     },
     lg: {
+      minHeight: 52,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.xl,
-      fontSize: typography.fontSize.lg,
+      fontSize: typography.button.fontSize + 1,
       gap: spacing.md,
     },
   }[size];
@@ -64,33 +70,38 @@ export function Button({
     switch (variant) {
       case 'primary':
         return {
-          bg: colors.primary,
-          text: colors.primaryForeground,
+          bg: disabled ? colors.backgroundElement : colors.primary,
+          text: disabled ? colors.textDisabled : colors.primaryForeground,
           border: 'transparent',
+          loaderColor: colors.primaryForeground,
         };
       case 'secondary':
         return {
-          bg: colors.backgroundElement,
-          text: colors.text,
+          bg: disabled ? colors.backgroundElement : colors.secondary,
+          text: disabled ? colors.textDisabled : colors.secondaryForeground,
           border: 'transparent',
+          loaderColor: colors.secondaryForeground,
         };
       case 'outline':
         return {
           bg: 'transparent',
-          text: colors.primary,
-          border: colors.border,
+          text: disabled ? colors.textDisabled : colors.primary,
+          border: disabled ? colors.border : colors.primary,
+          loaderColor: colors.primary,
         };
       case 'ghost':
         return {
           bg: 'transparent',
-          text: colors.text,
+          text: disabled ? colors.textDisabled : colors.text,
           border: 'transparent',
+          loaderColor: colors.text,
         };
       case 'danger':
         return {
-          bg: colors.error,
-          text: '#ffffff',
+          bg: disabled ? colors.backgroundElement : colors.error,
+          text: disabled ? colors.textDisabled : '#FFFFFF',
           border: 'transparent',
+          loaderColor: '#FFFFFF',
         };
     }
   };
@@ -99,25 +110,34 @@ export function Button({
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel ?? title}
+      accessibilityState={{
+        disabled: !isInteractive,
+        busy: isLoading,
+      }}
       disabled={!isInteractive}
+      hitSlop={size === 'sm' ? { top: 6, bottom: 6, left: 6, right: 6 } : undefined}
       style={({ pressed }) => [
         styles.base,
         {
-          backgroundColor: vStyle.bg,
+          minHeight: sizeStyles.minHeight,
+          backgroundColor: pressed && isInteractive ? (variant === 'primary' ? colors.primaryDark : vStyle.bg) : vStyle.bg,
           borderColor: vStyle.border,
-          borderWidth: variant === 'outline' ? 1 : 0,
+          borderWidth: variant === 'outline' ? 1.5 : 0,
           borderRadius: radius.md,
           paddingVertical: sizeStyles.paddingVertical,
           paddingHorizontal: sizeStyles.paddingHorizontal,
           gap: sizeStyles.gap,
-          opacity: !isInteractive ? 0.6 : pressed ? 0.8 : 1,
+          width: fullWidth ? '100%' : undefined,
+          opacity: disabled ? 0.6 : pressed ? 0.85 : 1,
         },
         style,
       ]}
       className={className}
       {...rest}>
       {isLoading ? (
-        <ActivityIndicator size="small" color={vStyle.text} />
+        <ActivityIndicator size="small" color={vStyle.loaderColor} />
       ) : (
         <>
           {leftIcon}
@@ -127,7 +147,8 @@ export function Button({
               {
                 color: vStyle.text,
                 fontSize: sizeStyles.fontSize,
-                fontWeight: typography.fontWeight.semibold,
+                fontWeight: typography.button.fontWeight,
+                letterSpacing: typography.button.letterSpacing,
               },
             ]}>
             {title}
