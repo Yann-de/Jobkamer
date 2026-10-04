@@ -1,0 +1,59 @@
+{
+  "common": {
+    "appName": "JobKamer",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "search": "Rechercher",
+    "seeAll": "Voir tout",
+    "empty": "Aucun résultat trouvé",
+    "close": "Fermer"
+  },
+  "navigation": {
+    "feed": "Accueil",
+    "jobs": "Emplois",
+    "network": "Réseau",
+    "messages": "Messages",
+    "profile": "Profil"
+  },
+  "home": {
+    "welcome": "Bienvenue sur JobKamer",
+    "subtitle": "Le réseau professionnel de l'emploi au Cameroun",
+    "featuredJobs": "Offres à la une",
+    "networkHighlights": "Développez votre réseau professionnel",
+    "latestPosts": "Actualités professionnelles"
+  },
+  "jobs": {
+    "title": "Offres d'emploi",
+    "searchPlaceholder": "Poste, mot-clé ou entreprise",
+    "cityPlaceholder": "Douala, Yaoundé...",
+    "filters": "Filtres",
+    "apply": "Postuler",
+    "applied": "Candidature envoyée",
+    "saveJob": "Enregistrer l'offre"
+  },
+  "network": {
+    "title": "Mon Réseau",
+    "connections": "Relations",
+    "invitations": "Invitations en attente",
+    "connect": "Se connecter",
+    "pending": "En attente"
+  },
+  "messages": {
+    "title": "Messagerie",
+    "search": "Rechercher une conversation",
+    "empty": "Aucun message pour le moment"
+  },
+  "profile": {
+    "title": "Mon Profil",
+    "settings": "Paramètres",
+    "theme": "Thème d'affichage",
+    "themeLight": "Clair",
+    "themeDark": "Sombre",
+    "themeSystem": "Système",
+    "language": "Langue",
+    "logout": "Se déconnecter"
+  }
+}

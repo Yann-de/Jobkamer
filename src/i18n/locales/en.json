@@ -1,0 +1,59 @@
+{
+  "common": {
+    "appName": "JobKamer",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "seeAll": "See all",
+    "empty": "No results found",
+    "close": "Close"
+  },
+  "navigation": {
+    "feed": "Home",
+    "jobs": "Jobs",
+    "network": "Network",
+    "messages": "Messages",
+    "profile": "Profile"
+  },
+  "home": {
+    "welcome": "Welcome to JobKamer",
+    "subtitle": "The professional career and networking platform in Cameroon",
+    "featuredJobs": "Featured Jobs",
+    "networkHighlights": "Grow your professional network",
+    "latestPosts": "Professional updates"
+  },
+  "jobs": {
+    "title": "Job Offers",
+    "searchPlaceholder": "Title, keyword, or company",
+    "cityPlaceholder": "Douala, Yaoundé...",
+    "filters": "Filters",
+    "apply": "Apply now",
+    "applied": "Application submitted",
+    "saveJob": "Save job"
+  },
+  "network": {
+    "title": "My Network",
+    "connections": "Connections",
+    "invitations": "Pending Invitations",
+    "connect": "Connect",
+    "pending": "Pending"
+  },
+  "messages": {
+    "title": "Messages",
+    "search": "Search conversations",
+    "empty": "No messages yet"
+  },
+  "profile": {
+    "title": "My Profile",
+    "settings": "Settings",
+    "theme": "Display Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "language": "Language",
+    "logout": "Log out"
+  }
+}
