@@ -100,6 +100,28 @@
     "jobMatch": "Job for you",
     "system": "Information"
   },
+  "settings": {
+    "privacy": "Privacy",
+    "profileVisibility": "Profile visibility",
+    "public": "Public",
+    "private": "Private",
+    "showAvailability": "Show my availability",
+    "allowSearch": "Appear in search results",
+    "cvVisible": "CV visible to recruiters",
+    "notifications": "Notifications",
+    "notifyMessages": "New messages",
+    "notifyApplications": "Application updates",
+    "notifyJobMatch": "Jobs matching my profile",
+    "notifySystem": "System information",
+    "security": "Security",
+    "changePassword": "Change password",
+    "activeSessions": "Active sessions",
+    "account": "Account",
+    "exportData": "Export my data",
+    "deleteAccount": "Delete my account",
+    "deleteConfirmTitle": "Delete account",
+    "deleteConfirmMessage": "This action is irreversible. All your data will be deleted."
+  },
   "profile": {
     "title": "My Profile",
     "editProfile": "Edit Profile",

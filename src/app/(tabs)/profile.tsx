@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SymbolView } from 'expo-symbols';
 
@@ -16,11 +16,13 @@ import {
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAppLanguage } from '@/hooks/useAppLanguage';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useSettingsStore } from '@/stores/useSettingsStore';
 import { authService } from '@/services/auth/authService';
 import { ThemeMode } from '@/theme';
 
 type AvailabilityOption = 'Disponible immédiatement' | 'Disponible sous 1 mois' | 'En poste, à l’écoute';
 type CompanySizeOption = '1-10' | '11-50' | '51-200' | '200+';
+type SettingsSectionKey = 'privacy' | 'notifications' | 'security' | 'account';
 
 const AVAILABILITY_CHIPS: AvailabilityOption[] = [
   'Disponible immédiatement',
@@ -34,6 +36,18 @@ export default function ProfileScreen() {
   const { colors, spacing, radius, themeMode, setThemeMode } = useAppTheme();
   const { t, currentLocale, switchLanguage } = useAppLanguage();
   const { user, updateUser, clearSession } = useAuthStore();
+  const {
+    profileVisibility,
+    showAvailability,
+    allowSearchIndexing,
+    cvVisibleToRecruiters,
+    notifyNewMessage,
+    notifyApplicationUpdate,
+    notifyJobMatch,
+    notifySystemInfo,
+    setProfileVisibility,
+    toggleSetting,
+  } = useSettingsStore();
 
   const accountType = user?.accountType ?? 'candidate';
   const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || 'Utilisateur';
@@ -47,6 +61,7 @@ export default function ProfileScreen() {
   const [editSector, setEditSector] = useState(user?.sector ?? '');
   const [editCompanySize, setEditCompanySize] = useState(user?.companySize ?? '');
   const [isSaving, setIsSaving] = useState(false);
+  const [openSection, setOpenSection] = useState<SettingsSectionKey | null>(null);
 
   const themeOptions: { label: string; mode: ThemeMode }[] = [
     { label: t('profile.themeSystem'), mode: 'system' },
@@ -94,6 +109,75 @@ export default function ProfileScreen() {
     await authService.logout();
     clearSession();
   };
+
+  const toggleSection = (section: SettingsSectionKey) => {
+    setOpenSection((current) => (current === section ? null : section));
+  };
+
+  const showComingSoonFirebase = () => {
+    Alert.alert('Fonctionnalité disponible après intégration Firebase');
+  };
+
+  const showComingSoon = () => {
+    Alert.alert('Fonctionnalité disponible prochainement');
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(t('settings.deleteConfirmTitle'), t('settings.deleteConfirmMessage'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('settings.deleteAccount'),
+        style: 'destructive',
+        onPress: () => {
+          clearSession();
+        },
+      },
+    ]);
+  };
+
+  const renderSectionHeader = (
+    section: SettingsSectionKey,
+    title: string,
+    icon: React.ComponentProps<typeof SymbolView>['name'],
+  ) => {
+    const isOpen = openSection === section;
+    return (
+      <Pressable
+        accessibilityRole="button"
+        accessibilityState={{ expanded: isOpen }}
+        accessibilityLabel={title}
+        onPress={() => toggleSection(section)}
+        style={styles.sectionHeaderRow}>
+        <View style={styles.sectionHeaderLeft}>
+          <SymbolView name={icon} tintColor={colors.primary} size={18} />
+          <ThemedText variant="h3">{title}</ThemedText>
+        </View>
+        <SymbolView
+          name={{
+            ios: isOpen ? 'chevron.up' : 'chevron.down',
+            android: isOpen ? 'expand_less' : 'expand_more',
+            web: isOpen ? 'expand_less' : 'expand_more',
+          }}
+          tintColor={colors.textSecondary}
+          size={18}
+        />
+      </Pressable>
+    );
+  };
+
+  const renderToggleRow = (label: string, value: boolean, onToggle: () => void) => (
+    <View style={styles.toggleRow}>
+      <ThemedText variant="body" style={styles.toggleLabel}>
+        {label}
+      </ThemedText>
+      <Switch
+        value={value}
+        onValueChange={onToggle}
+        trackColor={{ true: colors.primary, false: colors.border }}
+        thumbColor={colors.surface}
+      />
+    </View>
+  );
 
   return (
     <ThemedView style={styles.container}>
@@ -393,6 +477,123 @@ export default function ProfileScreen() {
               accessibilityLabel={t('profile.logout')}
             />
           </Card>
+
+          {/* Section Confidentialité */}
+          <Card variant="outlined" padding="lg" style={[styles.sectionCard, { gap: spacing.md }]}>
+            {renderSectionHeader('privacy', t('settings.privacy'), {
+              ios: 'shield',
+              android: 'security',
+              web: 'security',
+            })}
+            {openSection === 'privacy' && (
+              <View style={{ gap: spacing.md }}>
+                <View style={{ gap: spacing.xs }}>
+                  <ThemedText variant="bodySmallBold">{t('settings.profileVisibility')}</ThemedText>
+                  <View style={[styles.buttonGroup, { gap: spacing.xs }]}>
+                    <Button
+                      title={t('settings.public')}
+                      size="sm"
+                      variant={profileVisibility === 'public' ? 'primary' : 'outline'}
+                      onPress={() => setProfileVisibility('public')}
+                    />
+                    <Button
+                      title={t('settings.private')}
+                      size="sm"
+                      variant={profileVisibility === 'private' ? 'primary' : 'outline'}
+                      onPress={() => setProfileVisibility('private')}
+                    />
+                  </View>
+                </View>
+
+                {renderToggleRow(t('settings.showAvailability'), showAvailability, () =>
+                  toggleSetting('showAvailability'),
+                )}
+                {renderToggleRow(t('settings.allowSearch'), allowSearchIndexing, () =>
+                  toggleSetting('allowSearchIndexing'),
+                )}
+                {accountType === 'candidate' &&
+                  renderToggleRow(t('settings.cvVisible'), cvVisibleToRecruiters, () =>
+                    toggleSetting('cvVisibleToRecruiters'),
+                  )}
+              </View>
+            )}
+          </Card>
+
+          {/* Section Notifications */}
+          <Card variant="outlined" padding="lg" style={[styles.sectionCard, { gap: spacing.md }]}>
+            {renderSectionHeader('notifications', t('settings.notifications'), {
+              ios: 'bell',
+              android: 'notifications',
+              web: 'notifications',
+            })}
+            {openSection === 'notifications' && (
+              <View style={{ gap: spacing.md }}>
+                {renderToggleRow(t('settings.notifyMessages'), notifyNewMessage, () =>
+                  toggleSetting('notifyNewMessage'),
+                )}
+                {renderToggleRow(t('settings.notifyApplications'), notifyApplicationUpdate, () =>
+                  toggleSetting('notifyApplicationUpdate'),
+                )}
+                {accountType === 'candidate' &&
+                  renderToggleRow(t('settings.notifyJobMatch'), notifyJobMatch, () =>
+                    toggleSetting('notifyJobMatch'),
+                  )}
+                {renderToggleRow(t('settings.notifySystem'), notifySystemInfo, () =>
+                  toggleSetting('notifySystemInfo'),
+                )}
+              </View>
+            )}
+          </Card>
+
+          {/* Section Sécurité */}
+          <Card variant="outlined" padding="lg" style={[styles.sectionCard, { gap: spacing.md }]}>
+            {renderSectionHeader('security', t('settings.security'), {
+              ios: 'lock',
+              android: 'lock',
+              web: 'lock',
+            })}
+            {openSection === 'security' && (
+              <View style={{ gap: spacing.md }}>
+                <Button
+                  title={t('settings.changePassword')}
+                  variant="outline"
+                  fullWidth
+                  onPress={showComingSoonFirebase}
+                />
+                <Button
+                  title={t('settings.activeSessions')}
+                  variant="outline"
+                  fullWidth
+                  onPress={showComingSoonFirebase}
+                />
+              </View>
+            )}
+          </Card>
+
+          {/* Section Compte */}
+          <Card variant="outlined" padding="lg" style={[styles.sectionCard, { gap: spacing.md }]}>
+            {renderSectionHeader('account', t('settings.account'), {
+              ios: 'person.crop.circle.badge.exclamationmark',
+              android: 'manage_accounts',
+              web: 'manage_accounts',
+            })}
+            {openSection === 'account' && (
+              <View style={{ gap: spacing.md }}>
+                <Button
+                  title={t('settings.exportData')}
+                  variant="outline"
+                  fullWidth
+                  onPress={showComingSoon}
+                />
+                <Button
+                  title={t('settings.deleteAccount')}
+                  variant="danger"
+                  fullWidth
+                  onPress={handleDeleteAccount}
+                />
+              </View>
+            )}
+          </Card>
         </ScrollView>
       </SafeAreaView>
     </ThemedView>
@@ -482,5 +683,26 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+  },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  sectionHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    flex: 1,
+  },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  toggleLabel: {
+    flex: 1,
   },
 });

@@ -100,6 +100,28 @@
     "jobMatch": "Offre pour vous",
     "system": "Information"
   },
+  "settings": {
+    "privacy": "Confidentialité",
+    "profileVisibility": "Visibilité du profil",
+    "public": "Public",
+    "private": "Privé",
+    "showAvailability": "Afficher ma disponibilité",
+    "allowSearch": "Apparaître dans les recherches",
+    "cvVisible": "CV visible aux recruteurs",
+    "notifications": "Notifications",
+    "notifyMessages": "Nouveaux messages",
+    "notifyApplications": "Mises à jour candidatures",
+    "notifyJobMatch": "Offres correspondant à mon profil",
+    "notifySystem": "Informations système",
+    "security": "Sécurité",
+    "changePassword": "Changer de mot de passe",
+    "activeSessions": "Sessions actives",
+    "account": "Compte",
+    "exportData": "Exporter mes données",
+    "deleteAccount": "Supprimer mon compte",
+    "deleteConfirmTitle": "Supprimer le compte",
+    "deleteConfirmMessage": "Cette action est irréversible. Toutes vos données seront supprimées."
+  },
   "profile": {
     "title": "Mon profil",
     "editProfile": "Modifier le profil",
