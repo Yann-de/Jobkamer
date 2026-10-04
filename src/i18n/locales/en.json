@@ -70,6 +70,26 @@
     "inputPlaceholder": "Write a message...",
     "unreadCount": "{{count}} unread"
   },
+  "publish": {
+    "title": "New post",
+    "publish": "Publish",
+    "cancel": "Cancel",
+    "typeUpdate": "Update",
+    "typeArticle": "Article",
+    "typeJob": "Job offer",
+    "placeholderUpdate": "Share a professional update...",
+    "placeholderArticle": "Write your article...",
+    "placeholderJob": "Describe the role and responsibilities...",
+    "jobTitle": "Job title",
+    "jobCity": "City",
+    "jobContract": "Contract type",
+    "jobSalary": "Salary (optional)",
+    "charCount": "{{count}}/1000",
+    "errorContent": "Content is required",
+    "errorJobTitle": "Job title is required",
+    "errorJobCity": "City is required",
+    "errorJobContract": "Select a contract type"
+  },
   "profile": {
     "title": "My Profile",
     "editProfile": "Edit Profile",

@@ -70,6 +70,26 @@
     "inputPlaceholder": "Écrire un message...",
     "unreadCount": "{{count}} non lu(s)"
   },
+  "publish": {
+    "title": "Nouvelle publication",
+    "publish": "Publier",
+    "cancel": "Annuler",
+    "typeUpdate": "Mise à jour",
+    "typeArticle": "Article",
+    "typeJob": "Offre d'emploi",
+    "placeholderUpdate": "Partagez une actualité professionnelle...",
+    "placeholderArticle": "Rédigez votre article...",
+    "placeholderJob": "Décrivez le poste et les responsabilités...",
+    "jobTitle": "Titre du poste",
+    "jobCity": "Ville",
+    "jobContract": "Type de contrat",
+    "jobSalary": "Salaire (optionnel)",
+    "charCount": "{{count}}/1000",
+    "errorContent": "Le contenu est requis",
+    "errorJobTitle": "Le titre du poste est requis",
+    "errorJobCity": "La ville est requise",
+    "errorJobContract": "Sélectionnez un type de contrat"
+  },
   "profile": {
     "title": "Mon profil",
     "editProfile": "Modifier le profil",
