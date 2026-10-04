@@ -25,6 +25,22 @@
     "networkHighlights": "Développez votre réseau professionnel",
     "latestPosts": "Actualités professionnelles"
   },
+  "feed": {
+    "title": "Fil d'actualité",
+    "recent": "Récent",
+    "composerPlaceholder": "Que souhaitez-vous partager ?",
+    "photo": "Photo",
+    "jobOffer": "Offre d'emploi",
+    "like": "J'aime",
+    "comment": "Commenter",
+    "share": "Partager",
+    "viewJob": "Voir l'offre",
+    "jobBadge": "Emploi",
+    "notifications": "Notifications",
+    "candidate": "Candidat",
+    "company": "Entreprise",
+    "recruiter": "Recruteur"
+  },
   "jobs": {
     "title": "Offres d'emploi",
     "searchPlaceholder": "Poste, mot-clé ou entreprise",
@@ -55,5 +71,79 @@
     "themeSystem": "Système",
     "language": "Langue",
     "logout": "Se déconnecter"
+  },
+  "auth": {
+    "welcome": {
+      "tagline": "Le réseau professionnel du Cameroun",
+      "loginButton": "Se connecter",
+      "registerButton": "Créer un compte"
+    },
+    "login": {
+      "title": "Connexion",
+      "subtitle": "Accédez à votre espace professionnel JobKamer",
+      "emailLabel": "Adresse email",
+      "emailPlaceholder": "exemple@domaine.cm",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Votre mot de passe",
+      "submitButton": "Se connecter",
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ? S'inscrire",
+      "errors": {
+        "emailRequired": "L'adresse email est requise",
+        "emailInvalid": "Veuillez entrer une adresse email valide",
+        "passwordRequired": "Le mot de passe est requis",
+        "passwordMin": "Le mot de passe doit contenir au moins 6 caractères",
+        "loginFailed": "Échec de la connexion. Veuillez vérifier vos identifiants."
+      }
+    },
+    "register": {
+      "title": "Créer un compte",
+      "subtitle": "Rejoignez le réseau professionnel camerounais",
+      "firstNameLabel": "Prénom",
+      "firstNamePlaceholder": "Votre prénom",
+      "lastNameLabel": "Nom",
+      "lastNamePlaceholder": "Votre nom",
+      "emailLabel": "Adresse email",
+      "emailPlaceholder": "exemple@domaine.cm",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "8 caractères minimum",
+      "phoneLabel": "Téléphone",
+      "phonePlaceholder": "+237 6XX XXX XXX",
+      "cityLabel": "Ville",
+      "cityPlaceholder": "Douala, Yaoundé...",
+      "continueButton": "Continuer",
+      "alreadyHaveAccount": "Déjà un compte ? Se connecter",
+      "errors": {
+        "firstNameRequired": "Le prénom est requis",
+        "lastNameRequired": "Le nom est requis",
+        "emailRequired": "L'adresse email est requise",
+        "emailInvalid": "Veuillez entrer une adresse email valide",
+        "passwordRequired": "Le mot de passe est requis",
+        "passwordMin": "Le mot de passe doit contenir au moins 8 caractères"
+      }
+    },
+    "accountType": {
+      "title": "Vous êtes...",
+      "subtitle": "Choisissez votre profil pour personnaliser votre expérience",
+      "candidateTitle": "Candidat",
+      "candidateDescription": "Je cherche un emploi ou des opportunités professionnelles",
+      "recruiterTitle": "Recruteur",
+      "recruiterDescription": "Je recrute des talents pour mon entreprise",
+      "submitButton": "Créer mon compte",
+      "backButton": "Retour"
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "subtitle": "Entrez votre email pour recevoir les instructions de réinitialisation",
+      "emailLabel": "Adresse email",
+      "emailPlaceholder": "exemple@domaine.cm",
+      "submitButton": "Envoyer le lien",
+      "backToLogin": "Retour à la connexion",
+      "successMessage": "Un lien de réinitialisation vous a été envoyé par email.",
+      "errors": {
+        "emailRequired": "L'adresse email est requise",
+        "emailInvalid": "Veuillez entrer une adresse email valide"
+      }
+    }
   }
 }

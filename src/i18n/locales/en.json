@@ -25,6 +25,22 @@
     "networkHighlights": "Grow your professional network",
     "latestPosts": "Professional updates"
   },
+  "feed": {
+    "title": "News Feed",
+    "recent": "Recent",
+    "composerPlaceholder": "What do you want to share?",
+    "photo": "Photo",
+    "jobOffer": "Job Offer",
+    "like": "Like",
+    "comment": "Comment",
+    "share": "Share",
+    "viewJob": "View job",
+    "jobBadge": "Job",
+    "notifications": "Notifications",
+    "candidate": "Candidate",
+    "company": "Company",
+    "recruiter": "Recruiter"
+  },
   "jobs": {
     "title": "Job Offers",
     "searchPlaceholder": "Title, keyword, or company",
@@ -55,5 +71,79 @@
     "themeSystem": "System",
     "language": "Language",
     "logout": "Log out"
+  },
+  "auth": {
+    "welcome": {
+      "tagline": "Cameroon's Professional Network",
+      "loginButton": "Sign In",
+      "registerButton": "Create Account"
+    },
+    "login": {
+      "title": "Sign In",
+      "subtitle": "Access your JobKamer professional space",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "example@domain.cm",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Your password",
+      "submitButton": "Sign In",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account? Sign up",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 6 characters",
+        "loginFailed": "Sign in failed. Please verify your credentials."
+      }
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Join the Cameroonian professional network",
+      "firstNameLabel": "First name",
+      "firstNamePlaceholder": "Your first name",
+      "lastNameLabel": "Last name",
+      "lastNamePlaceholder": "Your last name",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "example@domain.cm",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "8 characters minimum",
+      "phoneLabel": "Phone",
+      "phonePlaceholder": "+237 6XX XXX XXX",
+      "cityLabel": "City",
+      "cityPlaceholder": "Douala, Yaoundé...",
+      "continueButton": "Continue",
+      "alreadyHaveAccount": "Already have an account? Sign in",
+      "errors": {
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "passwordRequired": "Password is required",
+        "passwordMin": "Password must be at least 8 characters"
+      }
+    },
+    "accountType": {
+      "title": "You are...",
+      "subtitle": "Choose your profile to personalize your experience",
+      "candidateTitle": "Candidate",
+      "candidateDescription": "Looking for a job or career opportunities",
+      "recruiterTitle": "Recruiter",
+      "recruiterDescription": "Recruiting talent for my business",
+      "submitButton": "Create my account",
+      "backButton": "Back"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your email to receive reset instructions",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "example@domain.cm",
+      "submitButton": "Send Reset Link",
+      "backToLogin": "Back to sign in",
+      "successMessage": "A password reset link has been sent to your email.",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address"
+      }
+    }
   }
 }

@@ -9,8 +9,8 @@ export interface User {
   avatarUrl?: string;
   location?: string;
   city?: string;
-  country?: string;
-  createdAt: string;
+  accountType?: 'candidate' | 'recruiter';
+  createdAt?: string;
 }
 
 export interface Job {
