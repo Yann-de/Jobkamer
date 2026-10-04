@@ -25,10 +25,11 @@ function RootNavigator() {
 
   useEffect(() => {
     const inAuthGroup = segments[0] === '(auth)';
+    const isOnboarding = segments[1] === 'onboarding';
 
     if (!isAuthenticated && !inAuthGroup) {
       router.replace('/(auth)/welcome');
-    } else if (isAuthenticated && inAuthGroup) {
+    } else if (isAuthenticated && inAuthGroup && !isOnboarding) {
       router.replace('/(tabs)');
     }
   }, [isAuthenticated, segments, router]);

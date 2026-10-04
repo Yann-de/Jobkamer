@@ -40,7 +40,7 @@ export default function AccountTypeScreen() {
       const session = await authService.register(fullInput);
       setSession(session.user, session.token);
       resetRegistration();
-      router.replace('/(tabs)');
+      router.replace('/(auth)/onboarding');
     } catch {
       setErrorMessage('Une erreur est survenue lors de la création du compte.');
     } finally {

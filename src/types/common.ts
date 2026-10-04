@@ -9,7 +9,11 @@ export interface User {
   avatarUrl?: string;
   location?: string;
   city?: string;
-  accountType?: 'candidate' | 'recruiter';
+  accountType: 'candidate' | 'recruiter';
+  bio?: string;
+  availability?: string;
+  sector?: string;
+  companySize?: string;
   createdAt?: string;
 }
 

@@ -145,5 +145,26 @@
         "emailInvalid": "Veuillez entrer une adresse email valide"
       }
     }
+  },
+  "onboarding": {
+    "title": "Complétez votre profil",
+    "subtitle": "Vous pouvez le faire maintenant ou plus tard",
+    "skip": "Passer pour l'instant",
+    "avatar": "Ajouter une photo",
+    "avatarAlertTitle": "Information",
+    "avatarAlertMessage": "Fonctionnalité disponible prochainement",
+    "headline": "Titre professionnel",
+    "headlineCandidatePlaceholder": "Ex : Développeur Web Junior | Cherche CDI à Douala",
+    "headlineRecruiterPlaceholder": "Ex : Responsable RH chez TechCorp Cameroun",
+    "bio": "Bio",
+    "bioPlaceholder": "Parlez-nous de vous en quelques mots...",
+    "availability": "Disponibilité",
+    "availableNow": "Disponible immédiatement",
+    "availableSoon": "Disponible sous 1 mois",
+    "openToWork": "En poste, à l'écoute",
+    "sector": "Secteur d'activité",
+    "sectorPlaceholder": "Ex : Tech, Finance, BTP...",
+    "companySize": "Taille de l'entreprise",
+    "save": "Enregistrer et continuer"
   }
 }

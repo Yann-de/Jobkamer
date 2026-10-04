@@ -145,5 +145,26 @@
         "emailInvalid": "Please enter a valid email address"
       }
     }
+  },
+  "onboarding": {
+    "title": "Complete your profile",
+    "subtitle": "You can do this now or later",
+    "skip": "Skip for now",
+    "avatar": "Add a photo",
+    "avatarAlertTitle": "Information",
+    "avatarAlertMessage": "Feature coming soon",
+    "headline": "Professional headline",
+    "headlineCandidatePlaceholder": "e.g. Junior Web Developer | Looking for full-time in Douala",
+    "headlineRecruiterPlaceholder": "e.g. HR Manager at TechCorp Cameroon",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell us a few words about yourself...",
+    "availability": "Availability",
+    "availableNow": "Available immediately",
+    "availableSoon": "Available within 1 month",
+    "openToWork": "Employed, open to opportunities",
+    "sector": "Industry sector",
+    "sectorPlaceholder": "e.g. Tech, Finance, Construction...",
+    "companySize": "Company size",
+    "save": "Save and continue"
   }
 }
