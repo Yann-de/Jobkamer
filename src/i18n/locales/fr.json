@@ -13,8 +13,8 @@
   },
   "navigation": {
     "feed": "Accueil",
-    "jobs": "Emplois",
-    "network": "Réseau",
+    "jobs": "Offres",
+    "publish": "Publier",
     "messages": "Messages",
     "profile": "Profil"
   },
@@ -63,14 +63,28 @@
     "empty": "Aucun message pour le moment"
   },
   "profile": {
-    "title": "Mon Profil",
-    "settings": "Paramètres",
-    "theme": "Thème d'affichage",
+    "title": "Mon profil",
+    "editProfile": "Modifier le profil",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "about": "À propos",
+    "noBio": "Aucune bio renseignée",
+    "noHeadline": "Ajoutez un titre professionnel",
+    "availability": "Disponibilité",
+    "noAvailability": "Disponibilité non définie",
+    "company": "Entreprise",
+    "sector": "Secteur d'activité",
+    "companySize": "Taille de l'entreprise",
+    "theme": "Apparence",
+    "themeSystem": "Système",
     "themeLight": "Clair",
     "themeDark": "Sombre",
-    "themeSystem": "Système",
     "language": "Langue",
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "verified": "Recruteur",
+    "city": "Ville",
+    "cityPlaceholder": "Ex : Douala, Yaoundé...",
+    "notSpecified": "Non renseigné"
   },
   "auth": {
     "welcome": {

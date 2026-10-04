@@ -7,7 +7,7 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAppLanguage } from '@/hooks/useAppLanguage';
 
 export default function TabLayout() {
-  const { colors, spacing, isDark } = useAppTheme();
+  const { colors, spacing } = useAppTheme();
   const { t } = useAppLanguage();
 
   return (
@@ -56,12 +56,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="network"
+        name="publish"
         options={{
-          title: t('navigation.network'),
+          title: t('navigation.publish'),
           tabBarIcon: ({ color }) => (
             <SymbolView
-              name={{ ios: 'person.2.fill', android: 'group', web: 'group' }}
+              name={{ ios: 'plus.circle.fill', android: 'add_circle', web: 'add_circle' }}
               tintColor={color}
               size={22}
             />

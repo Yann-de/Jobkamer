@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Pressable,
+  StyleProp,
   StyleSheet,
   View,
   ViewProps,
@@ -11,14 +12,14 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 export type CardVariant = 'default' | 'elevated' | 'flat' | 'outlined';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 
-export interface CardProps extends ViewProps {
+export interface CardProps extends Omit<ViewProps, 'style'> {
   variant?: CardVariant;
   padding?: CardPadding;
   interactive?: boolean;
   onPress?: () => void;
   disabled?: boolean;
   className?: string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 }
 
 export function Card({
@@ -70,7 +71,7 @@ export function Card({
     borderRadius: radius.lg,
     padding: paddingStyle,
     ...getVariantStyle(),
-    ...style,
+    ...StyleSheet.flatten(style),
   };
 
   if (interactive && onPress) {
