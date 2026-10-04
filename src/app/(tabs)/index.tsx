@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, type Href } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 
 import { ThemedText } from '@/components/ThemedText';
@@ -19,6 +19,7 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAppLanguage } from '@/hooks/useAppLanguage';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useFeedStore } from '@/stores/useFeedStore';
+import { useNotificationStore } from '@/stores/useNotificationStore';
 import { APP_CONFIG } from '@/constants/config';
 
 const MOCK_POSTS: FeedPost[] = [
@@ -127,14 +128,15 @@ export default function FeedScreen() {
   const { colors, spacing, radius } = useAppTheme();
   const { t } = useAppLanguage();
   const { user } = useAuthStore();
-  const feedPosts = useFeedStore((state) => state.posts);
+  const storePosts = useFeedStore((state) => state.posts);
+  const { unreadCount } = useNotificationStore();
+  const allPosts = [...storePosts, ...MOCK_POSTS];
 
   const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || 'Utilisateur';
   const isRecruiter = user?.accountType === 'recruiter';
   const headerSubtitle = user
     ? t('home.greeting', { name: user.firstName })
     : t('home.subtitle');
-  const allPosts = [...feedPosts, ...MOCK_POSTS];
 
   const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
 
@@ -185,18 +187,32 @@ export default function FeedScreen() {
               size="sm"
               onPress={() => router.push('/(tabs)/jobs')}
             />
-            <IconButton
-              icon={
-                <SymbolView
-                  name={{ ios: 'bell', android: 'notifications', web: 'notifications' }}
-                  tintColor={colors.text}
-                  size={20}
-                />
-              }
-              accessibilityLabel={t('feed.notifications')}
-              variant="ghost"
-              size="sm"
-            />
+            <View style={styles.bellButtonWrapper}>
+              <IconButton
+                icon={
+                  <SymbolView
+                    name={{ ios: 'bell', android: 'notifications', web: 'notifications' }}
+                    tintColor={colors.text}
+                    size={20}
+                  />
+                }
+                accessibilityLabel={t('feed.notifications')}
+                variant="ghost"
+                size="sm"
+                onPress={() => router.push('/(tabs)/notifications' as Href)}
+              />
+              {unreadCount > 0 && (
+                <View
+                  style={[
+                    styles.bellBadge,
+                    { backgroundColor: colors.error },
+                  ]}>
+                  <Text style={styles.bellBadgeText}>
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </Text>
+                </View>
+              )}
+            </View>
           </View>
         </View>
 
@@ -524,6 +540,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+  },
+  bellButtonWrapper: {
+    position: 'relative',
+  },
+  bellBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 3,
+  },
+  bellBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '700',
+    lineHeight: 12,
   },
   scrollView: {
     flex: 1,

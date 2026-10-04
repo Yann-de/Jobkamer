@@ -90,6 +90,16 @@
     "errorJobCity": "La ville est requise",
     "errorJobContract": "Sélectionnez un type de contrat"
   },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Tout lire",
+    "empty": "Aucune notification",
+    "applicationReceived": "Nouvelle candidature",
+    "applicationUpdated": "Candidature mise à jour",
+    "newMessage": "Nouveau message",
+    "jobMatch": "Offre pour vous",
+    "system": "Information"
+  },
   "profile": {
     "title": "Mon profil",
     "editProfile": "Modifier le profil",

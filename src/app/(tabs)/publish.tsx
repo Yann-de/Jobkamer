@@ -31,20 +31,8 @@ export default function PublishScreen() {
   const { user } = useAuthStore();
   const addPost = useFeedStore((state) => state.addPost);
 
-  const accountType = user?.accountType ?? 'candidate';
   const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || 'Utilisateur';
-  const headline = user?.headline ?? '';
-
-  const typeOptions = useMemo(() => {
-    const base: { type: PostType; label: string }[] = [
-      { type: 'classic', label: t('publish.typeUpdate') },
-      { type: 'article', label: t('publish.typeArticle') },
-    ];
-    if (accountType === 'recruiter') {
-      base.push({ type: 'job', label: t('publish.typeJob') });
-    }
-    return base;
-  }, [accountType, t]);
+  const isRecruiter = user?.accountType === 'recruiter';
 
   const [postType, setPostType] = useState<PostType>('classic');
   const [content, setContent] = useState('');
@@ -59,18 +47,23 @@ export default function PublishScreen() {
   const [jobCityError, setJobCityError] = useState<string | undefined>();
   const [jobContractError, setJobContractError] = useState<string | undefined>();
 
-  const placeholder = useMemo(() => {
-    switch (postType) {
-      case 'article':
-        return t('publish.placeholderArticle');
-      case 'job':
-        return t('publish.placeholderJob');
-      default:
-        return t('publish.placeholderUpdate');
+  const typeOptions = useMemo(() => {
+    const options: { type: PostType; label: string }[] = [
+      { type: 'classic', label: t('publish.typeUpdate') },
+      { type: 'article', label: t('publish.typeArticle') },
+    ];
+    if (isRecruiter) {
+      options.push({ type: 'job', label: t('publish.typeJob') });
     }
-  }, [postType, t]);
+    return options;
+  }, [isRecruiter, t]);
 
-  const canPublish = content.trim().length > 0;
+  const contentPlaceholder =
+    postType === 'article'
+      ? t('publish.placeholderArticle')
+      : postType === 'job'
+        ? t('publish.placeholderJob')
+        : t('publish.placeholderUpdate');
 
   const clearErrors = () => {
     setContentError(undefined);
@@ -79,31 +72,40 @@ export default function PublishScreen() {
     setJobContractError(undefined);
   };
 
-  const handleSubmit = async () => {
+  const handleTypeChange = (type: PostType) => {
+    setPostType(type);
+    clearErrors();
+  };
+
+  const validate = (): boolean => {
+    let isValid = true;
     clearErrors();
 
-    let hasError = false;
     if (!content.trim()) {
       setContentError(t('publish.errorContent'));
-      hasError = true;
+      isValid = false;
     }
 
-    if (postType === 'job' && accountType === 'recruiter') {
+    if (postType === 'job' && isRecruiter) {
       if (!jobTitle.trim()) {
         setJobTitleError(t('publish.errorJobTitle'));
-        hasError = true;
+        isValid = false;
       }
       if (!jobCity.trim()) {
         setJobCityError(t('publish.errorJobCity'));
-        hasError = true;
+        isValid = false;
       }
       if (!jobContract) {
         setJobContractError(t('publish.errorJobContract'));
-        hasError = true;
+        isValid = false;
       }
     }
 
-    if (hasError) return;
+    return isValid;
+  };
+
+  const handlePublish = async () => {
+    if (!validate() || isSubmitting) return;
 
     setIsSubmitting(true);
     try {
@@ -114,9 +116,9 @@ export default function PublishScreen() {
         author: {
           id: user?.id ?? 'unknown',
           name: fullName,
-          headline,
+          headline: user?.headline ?? '',
           location: user?.city,
-          isCompany: accountType === 'recruiter',
+          isCompany: isRecruiter,
         },
         type: postType,
         timestamp: "À l'instant",
@@ -138,15 +140,14 @@ export default function PublishScreen() {
       };
 
       addPost(newPost);
-      router.replace('/(tabs)/' as Href);
-    } finally {
+      router.replace('/(tabs)/' as Href);    } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
     <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
         <KeyboardAvoidingView
           style={styles.flex}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -179,9 +180,9 @@ export default function PublishScreen() {
               title={t('publish.publish')}
               variant="primary"
               size="sm"
-              disabled={!canPublish}
+              disabled={!content.trim() || isSubmitting}
               isLoading={isSubmitting}
-              onPress={handleSubmit}
+              onPress={handlePublish}
             />
           </View>
 
@@ -190,22 +191,23 @@ export default function PublishScreen() {
             contentContainerStyle={[
               styles.content,
               {
-                padding: spacing.lg,
-                gap: spacing.lg,
+                paddingHorizontal: spacing.lg,
+                paddingTop: spacing.lg,
                 paddingBottom: spacing['4xl'],
+                gap: spacing.lg,
               },
             ]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}>
             <View style={[styles.authorRow, { gap: spacing.md }]}>
               <Avatar name={fullName} source={user?.avatarUrl} size="md" status="online" />
-              <View style={styles.authorText}>
+              <View style={styles.authorInfo}>
                 <ThemedText variant="bodyBold" numberOfLines={1}>
                   {fullName}
                 </ThemedText>
-                {headline ? (
+                {user?.headline ? (
                   <ThemedText variant="caption" colorToken="textSecondary" numberOfLines={1}>
-                    {headline}
+                    {user.headline}
                   </ThemedText>
                 ) : null}
               </View>
@@ -220,10 +222,7 @@ export default function PublishScreen() {
                     title={option.label}
                     size="sm"
                     variant={isSelected ? 'primary' : 'secondary'}
-                    onPress={() => {
-                      setPostType(option.type);
-                      clearErrors();
-                    }}
+                    onPress={() => handleTypeChange(option.type)}
                   />
                 );
               })}
@@ -233,10 +232,10 @@ export default function PublishScreen() {
               <TextInput
                 value={content}
                 onChangeText={(value) => {
-                  setContent(value.slice(0, 1000));
+                  setContent(value);
                   if (contentError) setContentError(undefined);
                 }}
-                placeholder={placeholder}
+                placeholder={contentPlaceholder}
                 placeholderTextColor={colors.textSecondary}
                 multiline
                 maxLength={1000}
@@ -246,7 +245,7 @@ export default function PublishScreen() {
                   {
                     backgroundColor: colors.backgroundElement,
                     borderColor: contentError ? colors.error : colors.border,
-                    borderRadius: radius.md,
+                    borderRadius: radius.lg,
                     color: colors.text,
                     minHeight: 120,
                   },
@@ -265,7 +264,7 @@ export default function PublishScreen() {
               </ThemedText>
             </View>
 
-            {postType === 'job' && accountType === 'recruiter' ? (
+            {postType === 'job' && isRecruiter ? (
               <View style={{ gap: spacing.md }}>
                 <Input
                   label={t('publish.jobTitle')}
@@ -315,9 +314,9 @@ export default function PublishScreen() {
 
                 <Input
                   label={t('publish.jobSalary')}
-                  placeholder="Ex : 300 000 - 450 000 FCFA"
                   value={jobSalary}
                   onChangeText={setJobSalary}
+                  placeholder="Ex : 300 000 - 450 000 FCFA"
                 />
               </View>
             ) : null}
@@ -356,7 +355,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  authorText: {
+  authorInfo: {
     flex: 1,
     gap: 2,
   },
@@ -369,7 +368,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 14,
     paddingVertical: 12,
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 22,
   },
   charCount: {

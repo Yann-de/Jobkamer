@@ -90,6 +90,16 @@
     "errorJobCity": "City is required",
     "errorJobContract": "Select a contract type"
   },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "empty": "No notifications",
+    "applicationReceived": "New application",
+    "applicationUpdated": "Application updated",
+    "newMessage": "New message",
+    "jobMatch": "Job for you",
+    "system": "Information"
+  },
   "profile": {
     "title": "My Profile",
     "editProfile": "Edit Profile",
