@@ -21,6 +21,7 @@
   "home": {
     "welcome": "Welcome to JobKamer",
     "subtitle": "The professional career and networking platform in Cameroon",
+    "greeting": "Hello, {{name}} 👋",
     "featuredJobs": "Featured Jobs",
     "networkHighlights": "Grow your professional network",
     "latestPosts": "Professional updates"
@@ -30,6 +31,7 @@
     "recent": "Recent",
     "composerPlaceholder": "What do you want to share?",
     "photo": "Photo",
+    "article": "Article",
     "jobOffer": "Job Offer",
     "like": "Like",
     "comment": "Comment",
@@ -46,6 +48,9 @@
     "searchPlaceholder": "Title, keyword, or company",
     "cityPlaceholder": "Douala, Yaoundé...",
     "filters": "Filters",
+    "offersCount": "{{count}} offer(s)",
+    "noResults": "No jobs match your search",
+    "salary": "Salary negotiable",
     "apply": "Apply now",
     "applied": "Application submitted",
     "saveJob": "Save job"

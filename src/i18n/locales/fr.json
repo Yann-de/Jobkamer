@@ -21,6 +21,7 @@
   "home": {
     "welcome": "Bienvenue sur JobKamer",
     "subtitle": "Le réseau professionnel de l'emploi au Cameroun",
+    "greeting": "Bonjour, {{name}} 👋",
     "featuredJobs": "Offres à la une",
     "networkHighlights": "Développez votre réseau professionnel",
     "latestPosts": "Actualités professionnelles"
@@ -30,6 +31,7 @@
     "recent": "Récent",
     "composerPlaceholder": "Que souhaitez-vous partager ?",
     "photo": "Photo",
+    "article": "Article",
     "jobOffer": "Offre d'emploi",
     "like": "J'aime",
     "comment": "Commenter",
@@ -46,6 +48,9 @@
     "searchPlaceholder": "Poste, mot-clé ou entreprise",
     "cityPlaceholder": "Douala, Yaoundé...",
     "filters": "Filtres",
+    "offersCount": "{{count}} offre(s)",
+    "noResults": "Aucune offre ne correspond à votre recherche",
+    "salary": "Salaire à négocier",
     "apply": "Postuler",
     "applied": "Candidature envoyée",
     "saveJob": "Enregistrer l'offre"

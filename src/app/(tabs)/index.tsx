@@ -14,37 +14,11 @@ import {
   Divider,
   IconButton,
 } from '@/components/ui';
+import { FeedPost } from '@/features/feed/types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAppLanguage } from '@/hooks/useAppLanguage';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { APP_CONFIG } from '@/constants/config';
-
-interface FeedAuthor {
-  id: string;
-  name: string;
-  headline: string;
-  location?: string;
-  isCompany?: boolean;
-}
-
-interface JobOfferDetails {
-  title: string;
-  company: string;
-  contractType: string;
-  location: string;
-  salary?: string;
-}
-
-interface FeedPost {
-  id: string;
-  author: FeedAuthor;
-  type: 'classic' | 'job';
-  timestamp: string;
-  content: string;
-  jobDetails?: JobOfferDetails;
-  likesCount: number;
-  commentsCount: number;
-  sharesCount: number;
-}
 
 const MOCK_POSTS: FeedPost[] = [
   {
@@ -129,13 +103,41 @@ const MOCK_POSTS: FeedPost[] = [
     commentsCount: 19,
     sharesCount: 14,
   },
+  {
+    id: 'post-5',
+    author: {
+      id: 'user-3',
+      name: 'Marie K.',
+      headline: 'Chef de projet Digital • Douala',
+      location: 'Douala',
+      isCompany: false,
+    },
+    type: 'article',
+    timestamp: 'Il y a 3 j',
+    content:
+      'Comment optimiser son CV pour le marché tech camerounais ? Voici 5 conseils pratiques issus de mon expérience en recrutement.',
+    likesCount: 87,
+    commentsCount: 23,
+    sharesCount: 31,
+  },
 ];
 
 export default function FeedScreen() {
   const { colors, spacing, radius } = useAppTheme();
   const { t } = useAppLanguage();
+  const { user } = useAuthStore();
+
+  const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || 'Utilisateur';
+  const isRecruiter = user?.accountType === 'recruiter';
+  const headerSubtitle = user
+    ? t('home.greeting', { name: user.firstName })
+    : t('home.subtitle');
 
   const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
+
+  const navigateToPublish = () => {
+    router.push('/(tabs)/publish');
+  };
 
   const handleToggleLike = (postId: string) => {
     setLikedPosts((prev) => ({
@@ -163,7 +165,7 @@ export default function FeedScreen() {
               {APP_CONFIG.name}
             </ThemedText>
             <ThemedText variant="caption" colorToken="textSecondary" numberOfLines={1}>
-              {t('home.subtitle')}
+              {headerSubtitle}
             </ThemedText>
           </View>
           <View style={styles.headerActions}>
@@ -210,10 +212,11 @@ export default function FeedScreen() {
           {/* Post Composer */}
           <Card variant="elevated" style={styles.composerCard}>
             <View style={styles.composerTopRow}>
-              <Avatar name="Yannick JobKamer" size="md" status="online" />
+              <Avatar name={fullName} source={user?.avatarUrl} size="md" status="online" />
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={t('feed.composerPlaceholder')}
+                onPress={navigateToPublish}
                 style={({ pressed }) => [
                   styles.composerInputButton,
                   {
@@ -235,6 +238,7 @@ export default function FeedScreen() {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel={t('feed.photo')}
+                onPress={navigateToPublish}
                 style={({ pressed }) => [
                   styles.composerActionButton,
                   { opacity: pressed ? 0.7 : 1 },
@@ -251,22 +255,43 @@ export default function FeedScreen() {
 
               <View style={[styles.actionDivider, { backgroundColor: colors.border }]} />
 
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={t('feed.jobOffer')}
-                style={({ pressed }) => [
-                  styles.composerActionButton,
-                  { opacity: pressed ? 0.7 : 1 },
-                ]}>
-                <SymbolView
-                  name={{ ios: 'briefcase.fill', android: 'work', web: 'work' }}
-                  tintColor={colors.secondary}
-                  size={18}
-                />
-                <ThemedText variant="bodySmallBold" colorToken="secondary">
-                  {t('feed.jobOffer')}
-                </ThemedText>
-              </Pressable>
+              {isRecruiter ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t('feed.jobOffer')}
+                  onPress={navigateToPublish}
+                  style={({ pressed }) => [
+                    styles.composerActionButton,
+                    { opacity: pressed ? 0.7 : 1 },
+                  ]}>
+                  <SymbolView
+                    name={{ ios: 'briefcase.fill', android: 'work', web: 'work' }}
+                    tintColor={colors.secondary}
+                    size={18}
+                  />
+                  <ThemedText variant="bodySmallBold" colorToken="secondary">
+                    {t('feed.jobOffer')}
+                  </ThemedText>
+                </Pressable>
+              ) : (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={t('feed.article')}
+                  onPress={navigateToPublish}
+                  style={({ pressed }) => [
+                    styles.composerActionButton,
+                    { opacity: pressed ? 0.7 : 1 },
+                  ]}>
+                  <SymbolView
+                    name={{ ios: 'doc.text', android: 'article', web: 'article' }}
+                    tintColor={colors.secondary}
+                    size={18}
+                  />
+                  <ThemedText variant="bodySmallBold" colorToken="secondary">
+                    {t('feed.article')}
+                  </ThemedText>
+                </Pressable>
+              )}
             </View>
           </Card>
 
