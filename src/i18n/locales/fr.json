@@ -63,9 +63,12 @@
     "pending": "En attente"
   },
   "messages": {
-    "title": "Messagerie",
-    "search": "Rechercher une conversation",
-    "empty": "Aucun message pour le moment"
+    "title": "Messages",
+    "search": "Rechercher une conversation...",
+    "empty": "Aucun message pour le moment",
+    "noResults": "Aucune conversation trouvée",
+    "inputPlaceholder": "Écrire un message...",
+    "unreadCount": "{{count}} non lu(s)"
   },
   "profile": {
     "title": "Mon profil",

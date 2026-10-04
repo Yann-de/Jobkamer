@@ -64,8 +64,11 @@
   },
   "messages": {
     "title": "Messages",
-    "search": "Search conversations",
-    "empty": "No messages yet"
+    "search": "Search conversations...",
+    "empty": "No messages yet",
+    "noResults": "No conversations found",
+    "inputPlaceholder": "Write a message...",
+    "unreadCount": "{{count}} unread"
   },
   "profile": {
     "title": "My Profile",
