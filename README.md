@@ -1,56 +1,145 @@
-# Welcome to your Expo app 👋
+# JobKamer
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+> Le réseau professionnel du Cameroun — Trouvez un emploi, recrutez des talents, développez votre réseau.
 
-## Get started
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-green)
+![Firebase](https://img.shields.io/badge/backend-Firebase-orange)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-1. Install dependencies
+## À propos
 
-   ```bash
-   npm install
-   ```
+JobKamer est une application mobile (Android & iOS) combinant un réseau social professionnel à la LinkedIn et une plateforme d'offres d'emploi adaptée au marché camerounais. Elle est bilingue (FR/EN) et cible en priorité les villes de Yaoundé, Douala, Bafoussam et Limbé.
 
-2. Start the app
+Deux types de comptes :
+- Candidat — cherche un emploi, postule, gère ses candidatures, développe son réseau
+- Recruteur — publie des offres, gère les candidatures, contacte les talents
 
-   ```bash
-   npx expo start
-   ```
+## Stack technique
 
-In the output, you'll find options to open the app in a
+| Couche | Technologie |
+|--------|-------------|
+| Mobile | React Native + Expo SDK 50+ |
+| Langage | TypeScript |
+| Navigation | Expo Router |
+| State | Zustand + TanStack Query |
+| UI | NativeWind + Design System custom |
+| Auth | Firebase Authentication |
+| Base de données | Cloud Firestore |
+| i18n | i18next (FR/EN) |
+| Monitoring | Sentry (prévu) |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Prérequis
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- Node.js 18+
+- npm ou yarn
+- Expo CLI (`npm install -g expo-cli`)
+- Un émulateur Android/iOS ou l'app Expo Go sur votre téléphone
 
-## Get a fresh project
-
-When you're ready, run:
+## Installation
 
 ```bash
-npm run reset-project
+git clone https://github.com/TON_USERNAME/JobKamer.git
+cd JobKamer
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Lancer le projet
 
-### Other setup steps
+```bash
+# Démarrer le serveur de développement
+npx expo start
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+# Android
+npx expo start --android
 
-## Learn more
+# iOS
+npx expo start --ios
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Structure du projet
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```text
+src/
+├── app/                    # Routes Expo Router
+│   ├── (auth)/             # Écrans d'authentification
+│   └── (tabs)/             # Navigation principale
+├── components/             # Composants réutilisables
+│   └── ui/                 # Design System (Button, Input, Card...)
+├── features/               # Logique métier par domaine
+│   ├── auth/               # Types et logique auth
+│   ├── feed/               # Types feed et publications
+│   ├── jobs/               # Types offres et candidatures
+│   ├── messages/           # Types messagerie
+│   └── notifications/      # Types notifications
+├── lib/                    # Configuration Firebase, i18n, QueryClient
+├── services/               # Appels API et Firebase
+│   ├── auth/               # authService (Firebase Auth)
+│   └── jobs/               # jobsService, applicationsService
+├── stores/                 # Stores Zustand
+├── theme/                  # Design tokens (couleurs, typo, spacing)
+├── types/                  # Types TypeScript globaux
+└── utils/                  # Utilitaires
+```
 
-## Join the community
+## Environnements
 
-Join our community of developers creating universal apps.
+Le projet utilise 3 environnements Firebase séparés :
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+| Env | Projet Firebase | Usage |
+|-----|------------------|-------|
+| dev | jobkamer-dev | Développement local |
+| staging | jobkamer-staging | Tests avant production |
+| prod | jobkamer-prod | Production |
+
+Pour changer d'environnement, modifier `CURRENT_ENV` dans `src/lib/firebaseConfig.ts`.
+
+## Fonctionnalités MVP
+
+- Authentification (inscription, connexion, mot de passe oublié)
+- Onboarding (profil minimal post-inscription)
+- Profil Candidat et Recruteur avec édition inline
+- Fil d'actualité mixte (publications + offres)
+- Publication (article, mise à jour, offre d'emploi)
+- Offres d'emploi avec recherche et filtres
+- Candidature avec lettre de motivation
+- Messagerie texte
+- Notifications
+- Paramètres (thème, langue, confidentialité, sécurité)
+- Mode hors ligne avec fallback sur données locales
+- Bilingue FR/EN
+- Dark mode (fond noir #000000)
+
+## Roadmap
+
+### V2
+
+- Upload de CV et photos
+- Firebase Functions (backend sécurisé)
+- Notifications push (FCM)
+- Recherche avancée (Algolia)
+- Système de connexions réseau
+
+### V3
+
+- Version web
+- Matching IA candidat/offre
+- Tableau de bord analytics recruteur
+
+## Contribuer
+
+1. Fork le projet
+2. Créer une branche (`git checkout -b feature/ma-fonctionnalite`)
+3. Commit (`git commit -m 'feat: ajouter ma fonctionnalité'`)
+4. Push (`git push origin feature/ma-fonctionnalite`)
+5. Ouvrir une Pull Request vers `develop`
+
+## Auteur
+
+Djoubissie Tchadgoue Yann Arsène
+
+Projet personnel — portfolio développeur mobile
+
+## Licence
+
+MIT
