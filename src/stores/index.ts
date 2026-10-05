@@ -4,3 +4,4 @@ export * from './useRegistrationStore';
 export * from './useFeedStore';
 export * from './useNotificationStore';
 export * from './useSettingsStore';
+export * from './useJobsStore';

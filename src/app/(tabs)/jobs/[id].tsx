@@ -17,6 +17,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Avatar, Badge, Button, Card, Divider, Input } from '@/components/ui';
 import { getJobById } from '@/features/jobs/jobsMocks';
+import { applicationsService } from '@/services/jobs/applicationsService';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { Job } from '@/types';
@@ -65,19 +66,37 @@ export default function JobDetailScreen() {
       return;
     }
 
+    if (!user?.id) {
+      Alert.alert('Erreur', 'Impossible de récupérer votre identifiant.');
+      return;
+    }
+
     setPhoneError(undefined);
     setIsSubmitting(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setShowModal(false);
-    setPhone('');
-    setLetter('');
-    setPhoneError(undefined);
-    setIsSubmitting(false);
-    Alert.alert(
-      'Candidature envoyée !',
-      'Le recruteur vous contactera prochainement.',
-    );
+    try {
+      await applicationsService.apply({
+        jobId: id ?? '',
+        fullName,
+        email,
+        phone,
+        coverLetter: letter || undefined,
+        candidateId: user.id,
+      });
+
+      handleCloseModal();
+      Alert.alert(
+        'Candidature envoyée !',
+        'Le recruteur vous contactera prochainement.'
+      );
+    } catch (error: any) {
+      const message = error?.message?.includes('network')
+        ? 'Erreur réseau. Vérifiez votre connexion.'
+        : 'Une erreur est survenue. Veuillez réessayer.';
+      Alert.alert('Erreur', message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!job) {

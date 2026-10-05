@@ -1,14 +1,15 @@
-import React, { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, type Href } from 'expo-router';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Badge, Button, Card, Input } from '@/components/ui';
-import { MOCK_JOBS } from '@/features/jobs/jobsMocks';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAppLanguage } from '@/hooks/useAppLanguage';
+import { useJobsStore } from '@/stores/useJobsStore';
+import { jobsService } from '@/services/jobs/jobsService';
 import { Job } from '@/types';
 
 const CONTRACT_FILTERS = ['Tous', 'CDI', 'CDD', 'Stage', 'Freelance'] as const;
@@ -35,15 +36,33 @@ function daysAgo(dateStr: string): string {
 }
 
 export default function JobsScreen() {
-  const { spacing } = useAppTheme();
+  const { spacing, colors } = useAppTheme();
   const { t } = useAppLanguage();
+  const { jobs, isLoading, error, setJobs, setLoading } = useJobsStore();
   const [selectedFilter, setSelectedFilter] = useState<string>('Tous');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const loadJobs = async () => {
+      try {
+        setLoading(true);
+        const openJobs = await jobsService.getOpenJobs();
+        setJobs(openJobs);
+      } catch (err) {
+        console.error('Error loading jobs:', err);
+        // Keep the mocks as fallback
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadJobs();
+  }, [setJobs, setLoading]);
 
   const filteredJobs = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
-    return MOCK_JOBS.filter((job) => {
+    return jobs.filter((job: Job) => {
       const matchesSearch =
         !query ||
         job.title.toLowerCase().includes(query) ||
@@ -54,7 +73,7 @@ export default function JobsScreen() {
 
       return matchesSearch && matchesFilter;
     });
-  }, [searchQuery, selectedFilter]);
+  }, [searchQuery, selectedFilter, jobs]);
 
   return (
     <ThemedView style={styles.container}>
@@ -69,6 +88,10 @@ export default function JobsScreen() {
               {t('jobs.offersCount', { count: filteredJobs.length })}
             </ThemedText>
           </View>
+
+          {error && (
+            <Badge label="Mode hors ligne" variant="warning" size="sm" />
+          )}
 
           <Input
             placeholder={t('jobs.searchPlaceholder')}
@@ -95,12 +118,16 @@ export default function JobsScreen() {
             })}
           </ScrollView>
 
-          {filteredJobs.length === 0 ? (
+          {isLoading ? (
+            <View style={{ alignItems: 'center', paddingVertical: spacing.xl }}>
+              <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+          ) : filteredJobs.length === 0 ? (
             <Card variant="outlined" style={styles.emptyContainer}>
               <ThemedText variant="bodyBold">{t('jobs.noResults')}</ThemedText>
             </Card>
           ) : (
-            filteredJobs.map((job) => (
+            filteredJobs.map((job: Job) => (
               <Card key={job.id} variant="elevated" style={styles.jobCard}>
                 <ThemedText variant="bodyBold">{job.title}</ThemedText>
                 <ThemedText variant="caption" colorToken="textSecondary">
