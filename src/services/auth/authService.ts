@@ -1,39 +1,61 @@
-import { AuthSession, LoginCredentials, RegisterInput } from '@/features/auth/types';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  sendPasswordResetEmail,
+  updateProfile,
+} from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-// Mock — sera remplacé par Firebase Auth
+import { auth, db } from '@/lib/firebase';
+import { AuthSession, LoginCredentials, RegisterInput } from '@/features/auth/types';
+import { User } from '@/types';
+
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<AuthSession> => {
-    await new Promise((r) => setTimeout(r, 800)); // simuler latence
+    const result = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+    const userDoc = await getDoc(doc(db, 'users', result.user.uid));
+    const userData = userDoc.data() as User;
+
     return {
-      user: {
-        id: 'mock-001',
-        firstName: 'Yann',
-        lastName: 'D.',
-        email: credentials.email,
-        accountType: 'candidate',
-      },
-      token: 'mock-token-xyz',
-      expiresAt: new Date(Date.now() + 86400000).toISOString(),
+      user: userData,
+      token: await result.user.getIdToken(),
+      expiresAt: new Date(Date.now() + 3600000).toISOString(),
     };
   },
+
   register: async (input: RegisterInput): Promise<AuthSession> => {
-    await new Promise((r) => setTimeout(r, 1000));
+    const result = await createUserWithEmailAndPassword(auth, input.email, input.password);
+
+    await updateProfile(result.user, {
+      displayName: `${input.firstName} ${input.lastName}`,
+    });
+
+    const user: User = {
+      id: result.user.uid,
+      firstName: input.firstName,
+      lastName: input.lastName,
+      email: input.email,
+      accountType: input.accountType,
+      phone: input.phone,
+      city: input.city,
+      createdAt: new Date().toISOString(),
+    };
+
+    await setDoc(doc(db, 'users', result.user.uid), user);
+
     return {
-      user: {
-        id: 'mock-002',
-        firstName: input.firstName,
-        lastName: input.lastName,
-        email: input.email,
-        accountType: input.accountType,
-      },
-      token: 'mock-token-xyz',
-      expiresAt: new Date(Date.now() + 86400000).toISOString(),
+      user,
+      token: await result.user.getIdToken(),
+      expiresAt: new Date(Date.now() + 3600000).toISOString(),
     };
   },
+
   logout: async (): Promise<void> => {
-    await new Promise((r) => setTimeout(r, 300));
+    await signOut(auth);
   },
-  resetPassword: async (_email: string): Promise<void> => {
-    await new Promise((r) => setTimeout(r, 600));
+
+  resetPassword: async (email: string): Promise<void> => {
+    await sendPasswordResetEmail(auth, email);
   },
 };

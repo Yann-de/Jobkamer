@@ -34,10 +34,23 @@ export default function LoginScreen() {
       const session = await authService.login(data);
       setSession(session.user, session.token);
       router.replace('/(tabs)');
-    } catch {
-      setError('root', {
-        message: t('auth.login.errors.loginFailed'),
-      });
+    } catch (error: any) {
+      const code = error?.code ?? '';
+      let message = t('auth.login.errors.loginFailed');
+
+      if (
+        code === 'auth/user-not-found' ||
+        code === 'auth/wrong-password' ||
+        code === 'auth/invalid-credential'
+      ) {
+        message = 'Email ou mot de passe incorrect';
+      } else if (code === 'auth/too-many-requests') {
+        message = 'Trop de tentatives. Réessayez plus tard.';
+      } else if (error?.message?.includes('network')) {
+        message = 'Vérifiez votre connexion internet.';
+      }
+
+      setError('root', { message });
     }
   };
 

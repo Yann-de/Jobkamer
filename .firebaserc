@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "jobkamer-dev",
+    "dev": "jobkamer-dev",
+    "staging": "jobkamer-staging",
+    "prod": "jobkamer-prod"
+  }
+}

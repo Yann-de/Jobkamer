@@ -41,8 +41,18 @@ export default function AccountTypeScreen() {
       setSession(session.user, session.token);
       resetRegistration();
       router.replace('/(auth)/onboarding');
-    } catch {
-      setErrorMessage('Une erreur est survenue lors de la création du compte.');
+    } catch (error: any) {
+      const code = error?.code ?? '';
+
+      if (code === 'auth/email-already-in-use') {
+        setErrorMessage('Cet email est déjà utilisé');
+      } else if (code === 'auth/weak-password') {
+        setErrorMessage('Mot de passe trop faible');
+      } else if (error?.message?.includes('network')) {
+        setErrorMessage('Vérifiez votre connexion internet.');
+      } else {
+        setErrorMessage('Une erreur est survenue lors de la création du compte.');
+      }
     } finally {
       setIsSubmitting(false);
     }

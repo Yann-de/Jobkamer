@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import '@/global.css';
 import '@/lib/i18n';
+import { initAuthListener } from '@/lib/authStateListener';
 import { queryClient } from '@/lib/queryClient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -21,6 +22,11 @@ function RootNavigator() {
 
   useEffect(() => {
     SplashScreen.hideAsync().catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = initAuthListener();
+    return unsubscribe;
   }, []);
 
   useEffect(() => {
